@@ -15,11 +15,11 @@ export default async function (req, res) {
     return;
   }
 
-  const animal = req.body.animal || '';
-  if (animal.trim().length === 0) {
+  const symptoms = req.body.symptoms || '';
+  if (symptoms.trim().length === 0) {
     res.status(400).json({
       error: {
-        message: "Please enter a valid animal",
+        message: "Please enter valid symptoms",
       }
     });
     return;
@@ -28,8 +28,9 @@ export default async function (req, res) {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(animal),
+      prompt: generatePrompt(symptoms),
       temperature: 0.6,
+      max_tokens: 2048, // <-- Set max_tokens to 2048
     });
     res.status(200).json({ result: completion.data.choices[0].text });
   } catch(error) {
@@ -48,15 +49,16 @@ export default async function (req, res) {
   }
 }
 
-function generatePrompt(animal) {
-  const capitalizedAnimal =
-    animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-  return `Suggest three names for an animal that is a superhero.
+function generatePrompt(symptoms) {
+  return `Think of yourself as a highly experienced doctor. Based on the symptoms provided, suggest the next steps that should be followed. Write your answer in first person
+. I want your answer to be well formatted and it should always include,
+1. The possible diagnosis
+2. Additional questions to help to narrow down the diagnosis
+3. Possible recommendations that a doctor might make.
+4. Next steps that should be taken.
+Format your response in a professional manner, with appropriate spacing, tabs and alignments.
 
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: ${capitalizedAnimal}
-Names:`;
+Symptoms: ${symptoms}
+
+Diagnosis:`;
 }

@@ -1,15 +1,17 @@
 {
-  "name": "openai-quickstart-node",
-  "version": "0.1.0",
-  "private": true,
+  "name": "second-opinion-gpt",
+  "version": "1.0.0",
+  "description": "A Next.js app for generating medical diagnoses using OpenAI's GPT-3 API.",
+  "main": "index.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start -p $PORT -H $HOST -n second-opinion-gpt"
   },
   "dependencies": {
     "next": "^13.1.1",
-    "openai": "^3.1.0",
+    "next-auth": "^4.21.0",
+    "openai": "^3.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
